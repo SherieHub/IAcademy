@@ -1,24 +1,12 @@
+// frontend/app/onboarding.tsx (or wherever your screen is located)
+
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { router } from 'expo-router';
 import CustomInput from '../components/CustomInput';
 import PrimaryButton from '../components/PrimaryButton';
 import { Colors } from '../constants/Colors';
-
-// --- MOCK DATA ---
-const CEBU_PUBLIC_SCHOOLS = [
-  'Abellana National School',
-  'Camp Lapu-Lapu National High School',
-  'Cebu City National Science High School',
-  'City Central Elementary School',
-  'Don Vicente Rama Memorial National High School',
-  'Mabolo National High School',
-  'Ramon Duterte Memorial National High School'
-];
-
-const GRADE_LEVELS = ['Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10'];
-const QUARTERS = ['Quarter 1', 'Quarter 2', 'Quarter 3', 'Quarter 4'];
-const SUBJECTS = ['Biology', 'Mathematics', 'English', 'Araling Panlipunan', 'Filipino'];
+import { CEBU_PUBLIC_SCHOOLS, GRADE_LEVELS, QUARTERS, SUBJECTS } from '../constants/MockData';
 
 export default function OnboardingScreen() {
   // --- STATE ---
