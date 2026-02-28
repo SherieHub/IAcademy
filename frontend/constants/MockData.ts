@@ -21,3 +21,7 @@ export const QUARTERS = [
 export const SUBJECTS = [
   'Biology', 'Mathematics', 'English', 'Araling Panlipunan', 'Filipino'
 ];
+
+export const LANGUAGES = [
+  'English', 'Tagalog', 'Bisaya'
+];

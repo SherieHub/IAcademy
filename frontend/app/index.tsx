@@ -63,6 +63,14 @@ export default function OnboardingScreen() {
             value={subject}
             onSelect={setSubject}
           />
+          <CustomInput
+            label="Languages"
+            placeholder="Select language..."
+            isDropdown
+            options={LANGUAGES}
+            value={subject}
+            onSelect={setSubject}
+          />
         </View>
       </ScrollView>
 
