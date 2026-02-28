@@ -5,8 +5,28 @@ import CustomInput from '../components/CustomInput';
 import PrimaryButton from '../components/PrimaryButton';
 import { Colors } from '../constants/Colors';
 
+// --- MOCK DATA ---
+const CEBU_PUBLIC_SCHOOLS = [
+  'Abellana National School',
+  'Camp Lapu-Lapu National High School',
+  'Cebu City National Science High School',
+  'City Central Elementary School',
+  'Don Vicente Rama Memorial National High School',
+  'Mabolo National High School',
+  'Ramon Duterte Memorial National High School'
+];
+
+const GRADE_LEVELS = ['Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10'];
+const QUARTERS = ['Quarter 1', 'Quarter 2', 'Quarter 3', 'Quarter 4'];
+const SUBJECTS = ['Biology', 'Mathematics', 'English', 'Araling Panlipunan', 'Filipino'];
+
 export default function OnboardingScreen() {
+  // --- STATE ---
   const [name, setName] = useState('');
+  const [school, setSchool] = useState('');
+  const [grade, setGrade] = useState('');
+  const [quarter, setQuarter] = useState('');
+  const [subject, setSubject] = useState('');
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -25,23 +45,35 @@ export default function OnboardingScreen() {
           />
           <CustomInput
             label="Select School"
-            placeholder="Rural High A"
+            placeholder="Select a school..."
             isDropdown
+            options={CEBU_PUBLIC_SCHOOLS}
+            value={school}
+            onSelect={setSchool}
           />
           <CustomInput
             label="Grade Level"
-            placeholder="Grade 5"
+            placeholder="Select grade..."
             isDropdown
+            options={GRADE_LEVELS}
+            value={grade}
+            onSelect={setGrade}
           />
           <CustomInput
             label="Quarter"
-            placeholder="Quarter 2"
+            placeholder="Select quarter..."
             isDropdown
+            options={QUARTERS}
+            value={quarter}
+            onSelect={setQuarter}
           />
           <CustomInput
             label="Subject"
-            placeholder="Biology"
+            placeholder="Select subject..."
             isDropdown
+            options={SUBJECTS}
+            value={subject}
+            onSelect={setSubject}
           />
         </View>
       </ScrollView>

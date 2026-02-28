@@ -1,72 +1,123 @@
-import React from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, TextInputProps } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Modal, FlatList } from 'react-native';
 import { Colors } from '../constants/Colors';
 
-interface CustomInputProps extends TextInputProps {
+interface CustomInputProps {
   label: string;
+  placeholder?: string;
+  value?: string;
+  onChangeText?: (text: string) => void;
   isDropdown?: boolean;
-  onDropdownPress?: () => void;
+  options?: string[];
+  onSelect?: (option: string) => void;
 }
 
-export default function CustomInput({ label, isDropdown, onDropdownPress, ...textInputProps }: CustomInputProps) {
+export default function CustomInput({
+  label,
+  placeholder,
+  value,
+  onChangeText,
+  isDropdown,
+  options = [],
+  onSelect
+}: CustomInputProps) {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  // --- RENDERS A DROPDOWN MODAL ---
+  if (isDropdown) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.label}>{label}</Text>
+        <TouchableOpacity
+          style={styles.inputContainer}
+          onPress={() => setModalVisible(true)}
+          activeOpacity={0.7}
+        >
+          <Text style={value ? styles.inputText : styles.placeholderText}>
+            {value || placeholder}
+          </Text>
+        </TouchableOpacity>
+
+        <Modal visible={modalVisible} animationType="slide" transparent={true}>
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Select {label}</Text>
+              <FlatList
+                data={options}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.optionItem}
+                    onPress={() => {
+                      if (onSelect) onSelect(item);
+                      setModalVisible(false);
+                    }}
+                  >
+                    <Text style={styles.optionText}>{item}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+              <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+                <Text style={styles.closeButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </View>
+    );
+  }
+
+  // --- RENDERS A STANDARD TEXT INPUT ---
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
-
-      {isDropdown ? (
-        <TouchableOpacity style={styles.inputContainer} onPress={onDropdownPress} activeOpacity={0.7}>
-          <Text style={[styles.inputText, !textInputProps.value && styles.placeholder]}>
-            {textInputProps.value || textInputProps.placeholder || 'Select...'}
-          </Text>
-          {/* Simple text-based chevron for the mock dropdown */}
-          <Text style={styles.chevron}>▼</Text>
-        </TouchableOpacity>
-      ) : (
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.inputText}
-            placeholderTextColor={Colors.textSecondary}
-            {...textInputProps}
-          />
-        </View>
-      )}
+      <TextInput
+        style={styles.inputContainer}
+        placeholder={placeholder}
+        placeholderTextColor={Colors.textSecondary}
+        value={value}
+        onChangeText={onChangeText}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 16,
-    width: '100%',
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: Colors.textSecondary, // #64748B
-    marginBottom: 8,
-  },
+  container: { marginBottom: 20 },
+  label: { fontSize: 14, fontWeight: '600', color: Colors.textPrimary, marginBottom: 8 },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#F1F5F9', // Light gray background
+    backgroundColor: Colors.background,
     borderWidth: 1,
-    borderColor: Colors.border, // #CBD5E1
-    borderRadius: 8,
-    minHeight: 48,
-    paddingHorizontal: 12,
+    borderColor: Colors.border,
+    borderRadius: 12,
+    padding: 16,
+    justifyContent: 'center',
   },
-  inputText: {
+  inputText: { color: Colors.textPrimary, fontSize: 16 },
+  placeholderText: { color: Colors.textSecondary, fontSize: 16 },
+
+  // Modal Styles
+  modalOverlay: {
     flex: 1,
-    fontSize: 16,
-    color: Colors.textPrimary, // #0F172A
+    backgroundColor: 'rgba(11, 19, 43, 0.5)', // Navy blue with opacity
+    justifyContent: 'flex-end',
   },
-  placeholder: {
-    color: Colors.textSecondary,
+  modalContent: {
+    backgroundColor: Colors.background,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    padding: 24,
+    maxHeight: '80%',
   },
-  chevron: {
-    fontSize: 12,
-    color: Colors.textSecondary,
-    marginLeft: 8,
+  modalTitle: { fontSize: 20, fontWeight: 'bold', color: Colors.textPrimary, marginBottom: 16 },
+  optionItem: { paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: Colors.border },
+  optionText: { fontSize: 16, color: Colors.textPrimary },
+  closeButton: {
+    marginTop: 24,
+    backgroundColor: Colors.surface,
+    padding: 16,
+    borderRadius: 12,
+    alignItems: 'center',
   },
+  closeButtonText: { fontSize: 16, fontWeight: 'bold', color: Colors.textPrimary },
 });
